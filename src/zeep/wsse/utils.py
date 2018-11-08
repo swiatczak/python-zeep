@@ -11,11 +11,14 @@ from zeep.wsdl.utils import get_or_create_header
 NSMAP = {
     'wsse': ns.WSSE,
     'wsu': ns.WSU,
+    'soap11': ns.SOAP_ENV_11,
+    'soap12': ns.SOAP_ENV_12
 }
 WSSE = ElementMaker(namespace=NSMAP['wsse'], nsmap={'wsse': ns.WSSE})
 WSU = ElementMaker(namespace=NSMAP['wsu'], nsmap={'wsu': ns.WSU})
 ID_ATTR = etree.QName(NSMAP['wsu'], 'Id')
 
+MUST_UNDERSTAND_ATTR = lambda soap_ns: etree.QName(NSMAP.get(soap_ns ,ns.SOAP_ENV_11) , 'mustUnderstand')
 
 def get_security_header(doc):
     """Return the security header. If the header doesn't exist it will be
