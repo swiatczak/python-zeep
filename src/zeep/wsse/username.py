@@ -38,17 +38,25 @@ class UsernameToken(object):
     soap_message_secutity_ns = 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0'    # noqa
 
     def __init__(self, username, password=None, password_digest=None,
-                 use_digest=False, nonce=None, created=None):
+                 use_digest=False, nonce=None, created=None, mustUnderstand = 0):
         self.username = username
         self.password = password
         self.password_digest = password_digest
         self.nonce = nonce
         self.created = created
         self.use_digest = use_digest
+        self.mustUnderstand = mustUnderstand
 
     def apply(self, envelope, headers):
         security = utils.get_security_header(envelope)
 
+        # Set mustUnderstand attribute on the wsse.security element
+        # Note, in SOAP1.2 allowed values are (true, 1) with default being: true
+        if self.mustUnderstand in (True, 'SOAP_12'):
+            security.attrib[utils.MUST_UNDERSTAND_ATTR('SOAP_12')] = "true"
+        elif self.mustUnderstand in (1, '1', 'SOAP_11'):
+            security.attrib[utils.MUST_UNDERSTAND_ATTR('SOAP_11')] = "1"
+            
         # The token placeholder might already exists since it is specified in
         # the WSDL.
         token = security.find('{%s}UsernameToken' % ns.WSSE)
