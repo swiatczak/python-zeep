@@ -11,8 +11,8 @@ from zeep.wsdl.utils import get_or_create_header
 NSMAP = {
     'wsse': ns.WSSE,
     'wsu': ns.WSU,
-    'soap11': ns.SOAP_ENV_11,
-    'soap12': ns.SOAP_ENV_12
+    'SOAP_11': ns.SOAP_ENV_11,
+    'SOAP_12': ns.SOAP_ENV_1
 }
 WSSE = ElementMaker(namespace=NSMAP['wsse'], nsmap={'wsse': ns.WSSE})
 WSU = ElementMaker(namespace=NSMAP['wsu'], nsmap={'wsu': ns.WSU})
